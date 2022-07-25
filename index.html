@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form validation</title>
+    <link rel="stylesheet" href="index.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <form>
+        <h1>Form validation jQuery</h1>
+        <label>Email</label>
+        <input
+          type="email"
+          id="email"
+          autocomplete="off"
+          placeholder="example@gmail.com"
+        />
+        <h5 id="emailmessage"></h5>
+
+        <label>Password</label>
+        <input
+          type="password"
+          id="password"
+          autocomplete="off"
+          placeholder="********"
+        />
+        <h5 id="passwordmessage"></h5>
+
+        <label>Confirm Password</label>
+        <input
+          type="password"
+          id="conpassword"
+          autocomplete="off"
+          placeholder="********"
+        />
+        <h5 id="cnfpasswordmessage"></h5>
+        <span>Please Agree Term and Condition</span>
+        <input type="checkbox" id="checkbox" />
+
+        <h5 id="checkmsg"></h5>
+
+        <h5 id="successmsg"></h5>
+        <input type="button" value="Submit" id="submit" />
+      </form>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#emailmessage").hide();
+        $("#passwordmessage").hide();
+        $("#cnfpasswordmessage").hide();
+        $("#successmsg").hide();
+        $("#checkmsg").hide();
+
+        var email_err = true;
+        var pass_err = true;
+        var conpass_err = true;
+        var checked = false;
+
+        var email_val;
+        $("#email").keyup(function () {
+          email();
+        });
+
+        function email() {
+          email_val = $("#email").val();
+          // console.log(email_val, "email");
+          if (email_val == "" || email_val == ".com") {
+            $("#emailmessage").show();
+            $("#emailmessage").focus();
+            $("#emailmessage").html("** please fill the email");
+            $("#emailmessage").css("color", "red");
+            email_err = false;
+            return false;
+          } else {
+            $("#emailmessage").hide();
+          }
+
+          if (email_val.length < 10) {
+            $("#emailmessage").show();
+            $("#emailmessage").focus();
+            $("#emailmessage").html("** email include @ and .com");
+            $("#emailmessage").css("color", "red");
+            email_err = false;
+            return false;
+          } else {
+            $("#emailmessage").hide();
+          }
+        }
+        var pass_val;
+        $("#password").keyup(function () {
+          password();
+        });
+
+        function password() {
+          pass_val = $("#password").val();
+          // console.log(pass_val, "pass");
+          if (pass_val.length == null) {
+            $("#passwordmessage").show();
+            $("#passwordmessage").focus();
+            $("#passwordmessage").html("** Please fill the password");
+            $("#passwordmessage").css("color", "red");
+            pass_err = false;
+            return false;
+          } else {
+            $("#passwordmessage").hide();
+          }
+
+          if (pass_val.length < 6 || pass_val > 8) {
+            $("#passwordmessage").show();
+            $("#passwordmessage").focus();
+            $("#passwordmessage").html(
+              "** Password length must be between 6 and 10"
+            );
+            $("#passwordmessage").css("color", "red");
+            pass_err = false;
+            return false;
+          } else {
+            $("#passwordmessage").hide();
+          }
+        }
+
+        var conpass_val;
+        $("#conpassword").keyup(function () {
+          conpassword();
+        });
+
+        function conpassword() {
+          conpass_val = $("#conpassword").val();
+          var pass = $("#password").val();
+          // console.log(conpass_val);
+          if (conpass_val.length == 0) {
+            $("#cnfpasswordmessage").show();
+            $("#cnfpasswordmessage").focus();
+            $("#cnfpasswordmessage").html(
+              "** Please fill the Confirm password"
+            );
+            $("#cnfpasswordmessage").css("color", "red");
+            conpass_err = false;
+            return false;
+          } else if (pass !== conpass_val) {
+            $("#cnfpasswordmessage").show();
+            $("#cnfpasswordmessage").focus();
+            $("#cnfpasswordmessage").html("** Password not match");
+            $("#cnfpasswordmessage").css("color", "red");
+            conpass_err = false;
+            return false;
+          } else {
+            $("#cnfpasswordmessage").hide();
+          }
+
+          //   var conpass = $("#conpassword").val();
+          //   if (pass !== conpass) {
+
+          //   } else {
+          //     $("#cnfpasswordmessage").hide();
+          //   }
+        }
+        function checkbox() {
+          if ($("#checkbox").is(":checked")) {
+            $("#checkmsg").hide();
+          } else {
+            $("#checkmsg").show();
+            $("#checkmsg").html("Agree term and condition");
+            $("#checkmsg").css("color", "red");
+          }
+        }
+        function success() {
+          if (
+            email_val !== "" &&
+            pass_val !== "" &&
+            conpass_val !== "" &&
+            pass_val === conpass_val
+          ) {
+            $("#successmsg").show();
+            $("#successmsg").html("submitted successfully");
+            $("#successmsg").css("color", "green");
+          }
+        }
+
+        $("#submit").click(function () {
+          submit();
+          checkbox();
+        });
+        function submit() {
+          if (
+            email_val !== "" &&
+            pass_val !== "" &&
+            conpass_val !== "" &&
+            pass_val === conpass_val &&
+            $("#checkbox").is(":checked")
+          ) {
+            email();
+            password();
+            conpassword();
+            checkbox();
+            success();
+
+            // return false;
+            // }
+            // else if (
+            //   email_val == "" &&
+            //   pass_val.length == null &&
+            //   conpass_val.length == null
+            // ) {
+            //   console.log("inside if");
+            //   email();
+            //   password();
+            //   conpassword();
+            // }
+            // else if (
+            //   email_err == true &&
+            //   pass_err == true &&
+            //   conpass_err == true
+            // ) {
+            //   console.log("err msg");
+            //   return true;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
